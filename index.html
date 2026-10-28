@@ -3,86 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Duka Inventory - UCC</title>
+<title>NIFFER COSMETIC SHOP</title>
 <style>
-*{box-sizing:border-box;font-family:sans-serif}
-body{margin:0;background:#f1f5f9}
-header{background:#0f172a;color:white;padding:18px;text-align:center}
-.container{max-width:900px;margin:16px auto;padding:0 12px;display:grid;gap:16px}
-@media(min-width:768px){.container{grid-template-columns:1fr 1fr}}
-.card{background:white;border-radius:16px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-input{width:100%;padding:11px;border-radius:10px;border:1px solid #cbd5e1;margin-top:6px}
-.btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:700;margin-top:12px}
-.btn-add{background:#0f172a;color:white}
-.btn-sell{background:#22c55e}
-.receipt{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:12px;font-family:monospace;white-space:pre-line;min-height:90px}
+*{box-sizing:border-box;font-family:system-ui}body{margin:0;background:#fff0f6}header{background:linear-gradient(135deg,#ec4899,#8b5cf6);color:white;padding:20px;text-align:center}header h1{margin:0;font-size:22px}header p{margin:4px 0 0;opacity:.9}.container{max-width:980px;margin:16px auto;padding:0 12px;display:grid;gap:16px}@media(min-width:768px){.container{grid-template-columns:1fr 1fr}}.card{background:white;border-radius:18px;padding:16px;box-shadow:0 4px 14px rgba(236,72,153,.12);border:1px solid #fce7f3}input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #f9a8d4;margin-top:8px;background:#fffafb}label{font-size:12px;font-weight:800;color:#be185d;margin-top:12px;display:block}.btn{width:100%;padding:13px;border:none;border-radius:12px;font-weight:800;margin-top:12px;cursor:pointer}.btn-add{background:#ec4899;color:white}.btn-sell{background:#8b5cf6;color:white}.receipt{background:#1f1020;color:#fce7f3;border-radius:14px;padding:14px;font-family:monospace;white-space:pre-line;min-height:100px;border:1px solid #ec4899}.stock-item{padding:10px 0;border-bottom:1px solid #fce7f3;display:flex;justify-content:space-between}.badge{background:#fce7f3;color:#be185d;padding:3px 8px;border-radius:20px;font-size:11px}.action-btn{display:block;padding:13px;text-align:center;border-radius:12px;text-decoration:none;font-weight:800;margin-top:10px;color:white}.sms{background:#2563eb}.wa{background:#16a34a}.email{background:#f59e0b;color:#000}
 </style>
 </head>
 <body>
-<header>
-<h1>DUKA INVENTORY SYSTEM</h1>
-<p>UCC Final Year - Vincent Nyerere</p>
-</header>
+<header><h1>💄 NIFFER COSMETIC SHOP</h1><p>Beauty • Skincare • Perfume - Dar es Salaam</p></header>
 <div class="container">
 <div>
 <div class="card">
-<h3>1. Ongeza Bidhaa</h3>
-<input id="pName" placeholder="Jina: Sukari">
-<input id="pPrice" type="number" placeholder="Bei: 3000">
+<h3 style="color:#be185d">1. Ongeza Bidhaa za Urembo</h3>
+<select id="pCat"><option>Lipstick</option><option>Foundation</option><option>Perfume</option><option>Skincare</option><option>Hair</option><option>Nails</option><option>Other</option></select>
+<input id="pName" placeholder="Mf: Matte Lipstick - Pink">
+<input id="pPrice" type="number" placeholder="Bei: 15000">
 <input id="pQty" type="number" placeholder="Idadi: 20">
-<button class="btn btn-add" onclick="addProduct()">Ongeza Dukani</button>
+<button class="btn btn-add" onclick="addProduct()">Ongeza Dukani 💅</button>
 </div>
 <div class="card" style="margin-top:16px">
-<h3>2. Uza Bidhaa</h3>
-<input id="sName" placeholder="Jina: Sukari">
-<input id="sQty" type="number" placeholder="Idadi: 5">
-<button class="btn btn-sell" onclick="sellProduct()">Uza & Toa Risiti</button>
+<h3 style="color:#7c3aed">2. Uza kwa Mteja</h3>
+<input id="sName" placeholder="Jina la bidhaa: Lipstick">
+<input id="sQty" type="number" placeholder="Idadi: 2">
+<label>Jina la Mteja</label><input id="cName" placeholder="Neema">
+<label>Namba ya Simu (SMS/WhatsApp)</label><input id="cPhone" placeholder="0712345678">
+<label>Email ya Mteja</label><input id="cEmail" placeholder="neema@gmail.com">
+<button class="btn btn-sell" onclick="sellProduct()">Uza & Tuma Risiti ✨</button>
 </div>
 </div>
 <div>
-<div class="card">
-<h3>Stock Iliyopo</h3>
-<div id="stockList">Hakuna bidhaa bado</div>
-<div style="margin-top:10px">Jumla: <b id="totalValue">0 TZS</b></div>
-</div>
-<div class="card" style="margin-top:16px">
-<h3>Risiti ya Mteja</h3>
-<div id="receipt" class="receipt">Hakuna mauzo bado.</div>
-</div>
+<div class="card"><h3 style="color:#be185d">💖 Stock Iliyopo</h3><div id="stockList">Hakuna bidhaa bado</div><div style="margin-top:12px">Thamani ya Duka: <b id="totalValue" style="color:#ec4899">0 TZS</b></div></div>
+<div class="card" style="margin-top:16px"><h3>🧾 Risiti ya Mteja</h3><div id="receipt" class="receipt">Hakuna mauzo bado</div><div id="actionBox"></div></div>
 </div>
 </div>
 <script>
-let products=JSON.parse(localStorage.getItem('duka')||'[]');
-function save(){localStorage.setItem('duka',JSON.stringify(products));render();}
-function addProduct(){
-const n=document.getElementById('pName').value.trim();
-const p=parseFloat(document.getElementById('pPrice').value);
-const q=parseInt(document.getElementById('pQty').value);
-if(!n||!p||!q){alert('Jaza taarifa zote');return;}
-const e=products.find(x=>x.name.toLowerCase()===n.toLowerCase());
-if(e){e.qty+=q;e.price=p;}else{products.push({name:n,price:p,qty:q});}
-document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pQty').value='';
-save();
-}
-function sellProduct(){
-const n=document.getElementById('sName').value.trim();
-const q=parseInt(document.getElementById('sQty').value);
-const prod=products.find(x=>x.name.toLowerCase()===n.toLowerCase());
-if(!prod){alert('Bidhaa haijapatikana');return;}
-if(prod.qty<q){alert('Stock haitoshi. Zimebaki: '+prod.qty);return;}
-prod.qty-=q;
-const total=prod.price*q;
-const date=new Date().toLocaleString('sw-TZ');
-document.getElementById('receipt').innerText='==== DUKA LA VINCENT ====\nTarehe: '+date+'\nBidhaa: '+prod.name+'\nIdadi: '+q+'\nBei: '+prod.price+'\nJUMLA: '+total+' TZS\nAsante Karibu Tena!';
-if(prod.qty===0){products=products.filter(x=>x!==prod);}
-save();
-}
-function render(){
-const list=document.getElementById('stockList');
-if(products.length===0){list.innerHTML='Hakuna bidhaa';}
-else{list.innerHTML=products.map(p=>'<div style="padding:8px 0;border-bottom:1px solid #eee"><b>'+p.name+'</b> - '+p.price+' TZS x '+p.qty+'</div>').join('');}
-document.getElementById('totalValue').innerText=products.reduce((s,p)=>s+p.price*p.qty,0).toLocaleString()+' TZS';
-}
+let products=JSON.parse(localStorage.getItem('niffer')||'[]');
+function save(){localStorage.setItem('niffer',JSON.stringify(products));render();}
+function addProduct(){let cat=pCat.value,n=pName.value.trim(),p=parseFloat(pPrice.value),q=parseInt(pQty.value);if(!n||!p||!q)return alert('Jaza vyote');let e=products.find(x=>x.name.toLowerCase()===n.toLowerCase());if(e){e.qty+=q;e.price=p;e.cat=cat;}else products.push({name:n,price:p,qty:q,cat:cat});pName.value=pPrice.value=pQty.value='';save();}
+function sellProduct(){let n=sName.value.trim(),q=parseInt(sQty.value),phone=cPhone.value.trim(),email=cEmail.value.trim(),cname=cName.value.trim()||'Mteja';if(!n||!q)return alert('Jaza jina na idadi');if(!phone)return alert('Weka namba ya mteja');let prod=products.find(x=>x.name.toLowerCase()===n.toLowerCase());if(!prod)return alert('Bidhaa "'+n+'" haipo dukani!');if(prod.qty<q)return alert('Stock haitoshi. Iliyopo: '+prod.qty);prod.qty-=q;let total=prod.price*q;let date=new Date().toLocaleString('sw-TZ');let text=`💄 NIFFER COSMETIC SHOP\n📍 Dar es Salaam\nMteja: ${cname}\nTarehe: ${date}\nBidhaa: ${prod.name} (${prod.cat})\nIdadi: ${q}\nBei: ${prod.price} TZS\nJUMLA: ${total} TZS\n\nAsante kwa kununua Niffer! 💖\nKaribu Tena!`;document.getElementById('receipt').innerText=text;let enc=encodeURIComponent(text);let waPhone=phone.replace(/^0/,'255').replace(/\+/g,'');let smsLink=`sms:${phone}?body=${enc}`;let waLink=`https://wa.me/${waPhone}?text=${enc}`;let emailLink=`mailto:${email}?subject=Risiti - Niffer Cosmetic Shop&body=${enc}`;document.getElementById('actionBox').innerHTML=`<a class="action-btn sms" href="${smsLink}">📩 TUMA SMS YA KAWAIDA</a><a class="action-btn wa" href="${waLink}" target="_blank">💬 TUMA WhatsApp</a><a class="action-btn email" href="${emailLink}">📧 TUMA EMAIL</a>`;if(prod.qty===0)products=products.filter(x=>x!==prod);save();}
+function render(){let list=document.getElementById('stockList');if(!products.length)list.innerHTML='<small style="color:#f9a8d4">Hakuna bidhaa - ongeza Lipstick, Perfume, n.k</small>';else list.innerHTML=products.map(p=>`<div class="stock-item"><div><b>${p.name}</b><br><span class="badge">${p.cat}</span></div><div style="text-align:right">${p.price} TZS<br>x ${p.qty}</div></div>`).join('');document.getElementById('totalValue').innerText=products.reduce((s,p)=>s+p.price*p.qty,0).toLocaleString()+' TZS';}
 render();
 </script>
 </body>
