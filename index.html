@@ -1,15 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="sw">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NIFFER</title>
+<title>NIFFER COSMETIC SHOP</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui}
+body{margin:0;background:#fff0f6}
+header{background:linear-gradient(135deg,#ec4899,#8b5cf6);color:white;padding:20px;text-align:center}
+.container{max-width:980px;margin:16px auto;padding:0 12px;display:grid;gap:16px}
+@media(min-width:768px){.container{grid-template-columns:1fr 1fr}}
+.card{background:white;border-radius:18px;padding:16px;box-shadow:0 4px 14px rgba(236,72,153,.12);border:1px solid #fce7f3}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #f9a8d4;margin-top:8px;background:#fffafb}
+label{font-size:12px;font-weight:800;color:#be185d;margin-top:12px;display:block}
+.btn{width:100%;padding:13px;border:none;border-radius:12px;font-weight:800;margin-top:12px;cursor:pointer}
+.btn-add{background:#ec4899;color:white}
+.btn-sell{background:#8b5cf6;color:white}
+</style>
 </head>
 <body>
+<header><h1>💄 NIFFER COSMETIC SHOP</h1><p>Inventory System</p></header>
+<div class="container">
+<div>
+<div class="card">
+<h3 style="color:#be185d">1. Ongeza Bidhaa</h3>
+<select id="pCat"><option>Lipstick</option><option>Foundation</option><option>Perfume</option><option>Skincare</option><option>Hair</option><option>Nails</option><option>Other</option></select>
+<input id="pName" placeholder="Jina: Matte">
+<input id="pPrice" type="number" placeholder="Bei">
+<input id="pQty" type="number" placeholder="Idadi">
+<button class="btn btn-add" onclick="addProduct()">➕ Ongeza Dukani</button>
+</div>
+<div class="card" style="margin-top:16px">
+<h3 style="color:#7c3aed">2. Uza kwa Mteja</h3>
+<label>Chagua Bidhaa</label><select id="sName"></select>
+<input id="sQty" type="number" placeholder="Idadi ya Kuuza">
+<input id="cName" placeholder="Jina la Mteja">
+<input id="cPhone" placeholder="Simu: 0712...">
+<input id="cEmail" placeholder="Email">
+<button class="btn btn-sell" onclick="sellProduct()">💰 Uza Sasa</button>
+</div>
+</div>
+<div>
+<div class="card"><h3>💖 Stock Iliyopo</h3><div id="stockList" style="margin-top:10px"></div><hr><div>Jumla ya Mtaji: <b id="totalValue">0 TZS</b></div></div>
+<div class="card" style="margin-top:16px"><h3>🧾 Risiti ya Mwisho</h3><div id="receipt" style="white-space:pre-line;background:#fdf2f8;padding:12px;border-radius:10px;margin-top:8px">Hakuna mauzo bado</div><div id="actionBox"></div></div>
+</div>
+</div>
 <script>
-localStorage.clear();
-alert('Stock Imefutwa! Sasa rudi GitHub ukaweke code ya duka tena');
+let products=JSON.parse(localStorage.getItem('niffer')||'[]');
+function save(){localStorage.setItem('niffer',JSON.stringify(products));render();}
+function addProduct(){let cat=pCat.value,n=pName.value.trim(),p=parseFloat(pPrice.value),q=parseInt(pQty.value);if(!n||!p||!q)return alert('Jaza taarifa zote');let e=products.find(x=>x.name.toLowerCase()===n.toLowerCase());if(e){e.qty+=q;e.price=p;}else products.push({name:n,price:p,qty:q,cat:cat});pName.value=pPrice.value=pQty.value='';save();}
+function sellProduct(){let n=sName.value,q=parseInt(sQty.value),cname=cName.value.trim()||'Mteja';if(!n||n=='Hakuna bidhaa')return alert('Hakuna bidhaa');if(!q||q<=0)return alert('Weka idadi');let prod=products.find(x=>x.name===n);if(!prod)return alert('Bidhaa haipo');if(prod.qty<q)return alert('Stock haitoshi! Zipo: '+prod.qty);prod.qty-=q;let total=prod.price*q;document.getElementById('receipt').innerText=`NIFFER COSMETIC\nMteja: ${cname}\nBidhaa: ${prod.name}\nIdadi: ${q}\nBei: ${prod.price}\nJUMLA: ${total} TZS\nAsante!`;if(prod.qty===0)products=products.filter(x=>x!==prod);save();}
+function render(){let list=document.getElementById('stockList'),sel=document.getElementById('sName');if(!products.length){list.innerHTML='<small style="color:#999">Hakuna bidhaa</small>';sel.innerHTML='<option>Hakuna bidhaa</option>';}else{list.innerHTML=products.map(p=>`<div style="padding:10px 0;border-bottom:1px solid #fce7f3"><b>${p.name}</b><br><small>${p.cat} | Bei: ${p.price} | Idadi: ${p.qty}</small></div>`).join('');sel.innerHTML=products.map(p=>`<option value="${p.name}">${p.name} - zipo ${p.qty}</option>`).join('');}document.getElementById('totalValue').innerText=products.reduce((s,p)=>s+p.price*p.qty,0)+' TZS';}
+render();
 </script>
-<h1 style="text-align:center;padding:50px;">Stock Imefutwa! ✅</h1>
 </body>
 </html>
