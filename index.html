@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duka Inventory - UCC</title>
+<style>
+*{box-sizing:border-box;font-family:sans-serif}
+body{margin:0;background:#f1f5f9}
+header{background:#0f172a;color:white;padding:18px;text-align:center}
+.container{max-width:900px;margin:16px auto;padding:0 12px;display:grid;gap:16px}
+@media(min-width:768px){.container{grid-template-columns:1fr 1fr}}
+.card{background:white;border-radius:16px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+input{width:100%;padding:11px;border-radius:10px;border:1px solid #cbd5e1;margin-top:6px}
+.btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:700;margin-top:12px}
+.btn-add{background:#0f172a;color:white}
+.btn-sell{background:#22c55e}
+.receipt{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:12px;font-family:monospace;white-space:pre-line;min-height:90px}
+</style>
+</head>
+<body>
+<header>
+<h1>DUKA INVENTORY SYSTEM</h1>
+<p>UCC Final Year - Vincent Nyerere</p>
+</header>
+<div class="container">
+<div>
+<div class="card">
+<h3>1. Ongeza Bidhaa</h3>
+<input id="pName" placeholder="Jina: Sukari">
+<input id="pPrice" type="number" placeholder="Bei: 3000">
+<input id="pQty" type="number" placeholder="Idadi: 20">
+<button class="btn btn-add" onclick="addProduct()">Ongeza Dukani</button>
+</div>
+<div class="card" style="margin-top:16px">
+<h3>2. Uza Bidhaa</h3>
+<input id="sName" placeholder="Jina: Sukari">
+<input id="sQty" type="number" placeholder="Idadi: 5">
+<button class="btn btn-sell" onclick="sellProduct()">Uza & Toa Risiti</button>
+</div>
+</div>
+<div>
+<div class="card">
+<h3>Stock Iliyopo</h3>
+<div id="stockList">Hakuna bidhaa bado</div>
+<div style="margin-top:10px">Jumla: <b id="totalValue">0 TZS</b></div>
+</div>
+<div class="card" style="margin-top:16px">
+<h3>Risiti ya Mteja</h3>
+<div id="receipt" class="receipt">Hakuna mauzo bado.</div>
+</div>
+</div>
+</div>
+<script>
+let products=JSON.parse(localStorage.getItem('duka')||'[]');
+function save(){localStorage.setItem('duka',JSON.stringify(products));render();}
+function addProduct(){
+const n=document.getElementById('pName').value.trim();
+const p=parseFloat(document.getElementById('pPrice').value);
+const q=parseInt(document.getElementById('pQty').value);
+if(!n||!p||!q){alert('Jaza taarifa zote');return;}
+const e=products.find(x=>x.name.toLowerCase()===n.toLowerCase());
+if(e){e.qty+=q;e.price=p;}else{products.push({name:n,price:p,qty:q});}
+document.getElementById('pName').value='';document.getElementById('pPrice').value='';document.getElementById('pQty').value='';
+save();
+}
+function sellProduct(){
+const n=document.getElementById('sName').value.trim();
+const q=parseInt(document.getElementById('sQty').value);
+const prod=products.find(x=>x.name.toLowerCase()===n.toLowerCase());
+if(!prod){alert('Bidhaa haijapatikana');return;}
+if(prod.qty<q){alert('Stock haitoshi. Zimebaki: '+prod.qty);return;}
+prod.qty-=q;
+const total=prod.price*q;
+const date=new Date().toLocaleString('sw-TZ');
+document.getElementById('receipt').innerText='==== DUKA LA VINCENT ====\nTarehe: '+date+'\nBidhaa: '+prod.name+'\nIdadi: '+q+'\nBei: '+prod.price+'\nJUMLA: '+total+' TZS\nAsante Karibu Tena!';
+if(prod.qty===0){products=products.filter(x=>x!==prod);}
+save();
+}
+function render(){
+const list=document.getElementById('stockList');
+if(products.length===0){list.innerHTML='Hakuna bidhaa';}
+else{list.innerHTML=products.map(p=>'<div style="padding:8px 0;border-bottom:1px solid #eee"><b>'+p.name+'</b> - '+p.price+' TZS x '+p.qty+'</div>').join('');}
+document.getElementById('totalValue').innerText=products.reduce((s,p)=>s+p.price*p.qty,0).toLocaleString()+' TZS';
+}
+render();
+</script>
+</body>
+</html>
